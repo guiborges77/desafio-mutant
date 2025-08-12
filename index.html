@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pipeline de Dados URA - Mutant</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="slideshow-container">
+      <div class="slide-number" id="slideNumber">1 / 7</div>
+      <div class="mutant-logo">MUTANT</div>
+
+      <div class="slide active">
+        <h1>Pipeline de Dados URA</h1>
+        <p class="subtitle">
+          Transformando logs de interação em insights de negócio<br />
+          Uma solução de engenharia de dados para a nova era do CX
+        </p>
+        <div style="margin-top: 60px">
+          <p style="font-size: 1.2em; color: #333; font-weight: 600">
+            <strong>Objetivo:</strong> Processar logs JSON da URA e criar tabela
+            analítica<br />
+            para responder às perguntas estratégicas do time de negócio
+          </p>
+        </div>
+      </div>
+
+      <div class="slide">
+        <h2>🏗️ Arquitetura do Pipeline</h2>
+        <p class="subtitle">
+          Organizei os dados em 3 camadas para máxima eficiência:
+        </p>
+
+        <div class="layers">
+          <div class="layer bronze">
+            <h4>🥉 BRONZE</h4>
+            <p>Dados crus em JSON, armazenados exatamente como chegam da URA</p>
+          </div>
+          <div class="layer silver">
+            <h4>🥈 SILVER</h4>
+            <p>Dados limpos, validados e com colunas padronizadas</p>
+          </div>
+          <div class="layer gold">
+            <h4>🥇 GOLD</h4>
+            <p>Tabela final otimizada com métricas de negócio para BI</p>
+          </div>
+        </div>
+
+        <div class="pipeline-flow">
+          <div class="pipeline-box">JSON LOGS</div>
+          <span class="arrow">→</span>
+          <div class="pipeline-box">BRONZE</div>
+          <span class="arrow">→</span>
+          <div class="pipeline-box">SILVER</div>
+          <span class="arrow">→</span>
+          <div class="pipeline-box">GOLD</div>
+        </div>
+      </div>
+
+      <div class="slide">
+        <h2>📊 Estrutura da Tabela Final</h2>
+        <p class="subtitle">Schema otimizado para análises de negócio</p>
+        <div class="table-container">
+          <table>
+            <tr>
+              <th>Coluna</th>
+              <th>Tipo</th>
+              <th>Descrição</th>
+            </tr>
+            <tr>
+              <td><strong>call_id</strong></td>
+              <td>STRING</td>
+              <td>Identificador único da ligação</td>
+            </tr>
+            <tr>
+              <td><strong>start_time</strong></td>
+              <td>TIMESTAMP</td>
+              <td>Momento de início da ligação</td>
+            </tr>
+            <tr>
+              <td><strong>end_time</strong></td>
+              <td>TIMESTAMP</td>
+              <td>Momento de término da ligação</td>
+            </tr>
+            <tr>
+              <td><strong>duration_seconds</strong></td>
+              <td>INTEGER</td>
+              <td>Duração total em segundos</td>
+            </tr>
+            <tr>
+              <td><strong>user_id</strong></td>
+              <td>STRING</td>
+              <td>Identificador do cliente</td>
+            </tr>
+            <tr>
+              <td><strong>intents_detected</strong></td>
+              <td>ARRAY&lt;STRING&gt;</td>
+              <td>Todas as intenções detectadas</td>
+            </tr>
+            <tr>
+              <td><strong>main_intent</strong></td>
+              <td>STRING</td>
+              <td>Intenção principal da ligação</td>
+            </tr>
+            <tr>
+              <td><strong>num_turns</strong></td>
+              <td>INTEGER</td>
+              <td>Total de interações na conversa</td>
+            </tr>
+            <tr>
+              <td><strong>call_date</strong></td>
+              <td>DATE</td>
+              <td>Data da ligação (para particionamento)</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="slide">
+        <h2>🛠️ Stack Tecnológica Escolhida</h2>
+        <p class="subtitle">Ferramentas modernas para máxima performance</p>
+        <div class="tools-grid">
+          <div class="tool-card">
+            <h4>🗄️ Armazenamento</h4>
+            <p>Google Cloud Storage</p>
+            <small>Escalável e econômico para grandes volumes</small>
+          </div>
+          <div class="tool-card">
+            <h4>⚙️ Processamento</h4>
+            <p>PySpark</p>
+            <small>Processamento distribuído para JSON</small>
+            fungicide
+          </div>
+          <div class="tool-card">
+            <h4>🔄 Orquestração</h4>
+            <p>Apache Airflow</p>
+            <small>Agendamento e monitoramento de ETL</small>
+          </div>
+          <div class="tool-card">
+            <h4>💾 Data Warehouse</h4>
+            <p>BigQuery</p>
+            <small>Analytics em tempo real</small>
+          </div>
+          <div class="tool-card">
+            <h4>📈 Visualização</h4>
+            <p>Power BI</p>
+            <small>Dashboards executivos</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide">
+        <h2>💻 Exemplo de Transformação</h2>
+        <p class="subtitle">
+          Cálculo de duração das ligações - lógica principal
+        </p>
+
+        <div class="code-block">
+          SELECT call_id, MIN(turn_timestamp) AS start_time, MAX(turn_timestamp)
+          AS end_time, TIMESTAMP_DIFF( MAX(turn_timestamp), MIN(turn_timestamp),
+          SECOND ) AS duration_seconds FROM bronze_layer.call_logs WHERE call_id
+          IS NOT NULL GROUP BY call_id HAVING duration_seconds > 0;
+        </div>
+
+        <p
+          style="
+            margin-top: 30px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1em;
+          "
+        >
+          <strong>Estratégia:</strong> Agrupa por call_id, identifica primeiro e
+          último timestamp, calcula diferença em segundos com validação de
+          dados.
+        </p>
+      </div>
+
+      <div class="slide">
+        <h2>📋 Resolvendo Questões de Negócio</h2>
+        <p class="subtitle">Queries diretas para insights imediatos</p>
+
+        <ul class="questions-list">
+          <li>
+            <strong>1. Volume de ligações por dia:</strong>
+            <code
+              >SELECT call_date, COUNT(*) as total_calls FROM tabela_gold GROUP
+              BY call_date ORDER BY call_date;</code
+            >
+          </li>
+          <li>
+            <strong>2. Top 5 intenções mais comuns:</strong>
+            <code
+              >SELECT main_intent, COUNT(*) as frequency FROM tabela_gold GROUP
+              BY main_intent ORDER BY frequency DESC LIMIT 5;</code
+            >
+          </li>
+          <li>
+            <strong>3. Duração média das ligações:</strong>
+            <code
+              >SELECT AVG(duration_seconds) as avg_duration FROM tabela_gold
+              WHERE duration_seconds > 10;</code
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div class="slide">
+        <h2>🎯 Entrega de Valor</h2>
+
+        <div class="benefits-grid">
+          <div class="benefit-card">
+            <h4>📊 Para o Negócio</h4>
+            <ul>
+              <li>Respostas em tempo real às questões estratégicas</li>
+              <li>Dados estruturados para tomada de decisão</li>
+              <li>Base sólida para dashboards executivos</li>
+              <li>Insights sobre comportamento do cliente</li>
+            </ul>
+          </div>
+          <div class="benefit-card">
+            <h4>🔧 Técnico</h4>
+            <ul>
+              <li>Pipeline escalável e resiliente</li>
+              <li>Dados limpos e validados</li>
+              <li>Arquitetura moderna e mantível</li>
+              <li>Monitoramento e alertas automatizados</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="conclusion-box">
+          <p>
+            <strong>Próximo passo:</strong> Implementação da pipeline para
+            começar a gerar insights que impulsionem a evolução do CX na Mutant!
+            🚀
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="navigation">
+      <button class="nav-btn" onclick="previousSlide()" id="prevBtn">
+        ← Anterior
+      </button>
+      <button class="nav-btn" onclick="nextSlide()" id="nextBtn">
+        Próximo →
+      </button>
+    </div>
+
+    <div class="contact-info-footer">
+      <p>Guilherme Borges de Oliveira</p>
+      <p>guilherme.borgesjob@gmail.com</p>
+      <p>+55 11 95285-6495</p>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
